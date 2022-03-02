@@ -19,13 +19,13 @@ DB Sync provides scripts to quickly update a local MySQL development database wi
 
 ## Installation
 
-Run `composer require "scottjs/db-sync:1.*" --dev` from the root of your project.
+Run `composer require "josephdsouza86/db-sync:1.*" --dev` from the root of your project.
 
-Alternatively, you can manually add `"scottjs/db-sync": "1.*"` to your `composer.json` file:
+Alternatively, you can manually add `"josephdsouza86/db-sync": "1.*"` to your `composer.json` file:
 
 ```
 "require-dev": {
-	"scottjs/db-sync": "1.*"
+	"josephdsouza86/db-sync": "1.*"
 }
 ```
 
@@ -34,16 +34,16 @@ Then add the following scripts to your `composer.json` file:
 ```
 "scripts": {
 	"database-update" : [
-		"vendor/scottjs/db-sync/database-update.sh"
+		"vendor/josephdsouza86/db-sync/database-update.sh"
 	],
 	"database-prepare" : [
-		"vendor/scottjs/db-sync/database-prepare.sh"
+		"vendor/josephdsouza86/db-sync/database-prepare.sh"
 	],
 	"database-import" : [
-		"vendor/scottjs/db-sync/database-import.sh"
+		"vendor/josephdsouza86/db-sync/database-import.sh"
 	],
 	"database-export" : [
-		"vendor/scottjs/db-sync/database-export.sh"
+		"vendor/josephdsouza86/db-sync/database-export.sh"
 	]
 }
 ```
@@ -57,13 +57,13 @@ DOMAIN_REMOTE=www.example.com
 DOMAIN_LOCAL=www.example.local
 
 DB_HOST=localhost
-DB_DATABASE=example
-DB_USERNAME=root
+DB_NAME=example
+DB_USER=root
 DB_PASSWORD=password
 
 REMOTE_DB_HOST=123.123.123.123
-REMOTE_DB_DATABASE=example
-REMOTE_DB_USERNAME=root
+REMOTE_DB_NAME=example
+REMOTE_DB_USER=root
 REMOTE_DB_PASSWORD=password
 ```
 
