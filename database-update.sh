@@ -49,13 +49,24 @@ if mysql -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS 
 
 	# Download database dump
 	echo Exporting database \'$REMOTE_DATABASE_NAME\' from remote server: $REMOTE_DATABASE_HOST
-	mysqldump -v -h $REMOTE_DATABASE_HOST -u $REMOTE_DATABASE_USER -p$REMOTE_DATABASE_PASS $REMOTE_DATABASE_NAME > "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
+	mysqldump -v -h $REMOTE_DATABASE_HOST -u $REMOTE_DATABASE_USER -p$REMOTE_DATABASE_PASS $REMOTE_DATABASE_NAME --quick --max_allowed_packet=512M --compress > "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
+
+	# Download database dump one table at a time
+	# for t in $(mysql -NBA -h $REMOTE_DATABASE_HOST -u $REMOTE_DATABASE_USER -p$REMOTE_DATABASE_PASS -D $REMOTE_DATABASE_NAME -e 'show tables') 
+	# do 
+	# 	echo "DUMPING TABLE: $t"
+	# 	mysqldump -h $REMOTE_DATABASE_HOST -u $REMOTE_DATABASE_USER -p$REMOTE_DATABASE_PASS $REMOTE_DATABASE_NAME $t --no-tablespaces >> "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
+	# 	tbl_count=$(( tbl_count + 1 ))
+	# done
+
+	# echo "$tbl_count tables dumped from database '$REMOTE_DATABASE_NAME'"
+	# echo Export file: remote-database-$CURRENT_TIME.sql
 
 	echo Remote database exported: remote-database-$CURRENT_TIME.sql
 
 	# Upload dump to local database
 	echo Importing database \'remote-database-$CURRENT_TIME.sql\' to local server: $LOCAL_DATABASE_HOST
-	mysql -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS $LOCAL_DATABASE_NAME < "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
+	mysql -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS $LOCAL_DATABASE_NAME --max_allowed_packet=512M < "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
 
 	echo COMPLETE: Database update complete: $LOCAL_DATABASE_NAME
 
