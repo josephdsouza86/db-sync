@@ -106,3 +106,10 @@ In your `my.ini` or `my.cfg` update the `max_allowed_packet` value to allow larg
 [mysqld]
 max_allowed_packet = 10M
 ```
+
+## Todo
+
+- [x] Add table ignore list
+- [ ] Improve table ignore list to be an `Array` rather than string comparison
+- [ ] Add table regex ignore list to exclude groups of tables, such as Wordfence tables by providing `wp_wf*` for example
+- [ ] Group the script into "dump", which can be used locally to create backups or remotely to download backups. And, "import", which can be used to restore a local backup or import a downloaded backup. Other shell scripts can then call these base scripts with arguments. This remove script duplication and make creating/maintaining command scripts easier (i.e. update, download-remote-only, etc)
