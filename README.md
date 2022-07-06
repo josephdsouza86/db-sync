@@ -96,4 +96,13 @@ See below for an explanation of each configuration option used within the .env f
 
 * ***SYNC_IGNORE_TABLES*** - Optional and can be left blank. Values indicate table names and multiple can be provided. For example: `SYNC_IGNORE_TABLES="wp_posts wp_postmeta wp_options"`
 
-* ***SYNC_IGNORE_ACTIVE_PLUGINS*** - Should be `true` or `false`. For WordPress databases, when `true` will ignore the `active_plugins` row in the `wp_options` table so as not to affect your environments active plugins.
+* ***SYNC_IGNORE_ACTIVE_PLUGINS*** - Should be `true` or `false`. For WordPress databases, `true` will ignore the `active_plugins` row in the `wp_options` table so as not to affect your environments active plugins.
+
+## Troubleshooting
+
+* *Got a packet bigger than 'max_allowed_packet' bytes*
+In your `my.ini` or `my.cfg` update the `max_allowed_packet` value to allow larger packets:
+``` 
+[mysqld]
+max_allowed_packet = 10M
+```
