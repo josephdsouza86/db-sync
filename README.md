@@ -65,6 +65,9 @@ REMOTE_DB_HOST=123.123.123.123
 REMOTE_DB_NAME=example
 REMOTE_DB_USER=root
 REMOTE_DB_PASSWORD=password
+
+SYNC_IGNORE_TABLES=
+SYNC_IGNORE_ACTIVE_PLUGINS=true
 ```
 
 ## Usage
@@ -90,3 +93,7 @@ See below for an explanation of each configuration option used within the .env f
 * ***DB_**** - Provides options to set the local database connection details.
 
 * ***REMOTE\_DB_**** - Provides options to set the remote staging or production database connection details.
+
+* ***SYNC_IGNORE_TABLES*** - Optional and can be left blank. Values indicate table names and multiple can be provided. For example: `SYNC_IGNORE_TABLES="wp_posts wp_postmeta wp_options"`
+
+* ***SYNC_IGNORE_ACTIVE_PLUGINS*** - Should be `true` or `false`. For WordPress databases, when `true` will ignore the `active_plugins` row in the `wp_options` table so as not to affect your environments active plugins.
