@@ -51,14 +51,6 @@ do
 	fi
 done
 
-# Delete local database
-echo Dropping local database: $LOCAL_DATABASE_NAME
-mysqladmin -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS drop $LOCAL_DATABASE_NAME -f
-
-# Create local database
-echo Creating local database: $LOCAL_DATABASE_NAME
-mysqladmin -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS create $LOCAL_DATABASE_NAME
-
 # Check for database connections
 if mysql -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS -e 'use '"$LOCAL_DATABASE_NAME" && mysql -h $REMOTE_DATABASE_HOST -u $REMOTE_DATABASE_USER -p$REMOTE_DATABASE_PASS -e 'use '"$REMOTE_DATABASE_NAME"; then
 
@@ -91,6 +83,14 @@ if mysql -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS 
 	echo "$tbl_count tables dumped from database '$REMOTE_DATABASE_NAME'"
 	echo Export file: "remote-database-$CURRENT_TIME.sql"	
 
+	# Delete local database
+	echo Dropping local database: $LOCAL_DATABASE_NAME
+	mysqladmin -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS drop $LOCAL_DATABASE_NAME -f
+
+	# Create local database
+	echo Creating local database: $LOCAL_DATABASE_NAME
+	mysqladmin -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS create $LOCAL_DATABASE_NAME
+
 	# Upload dump to local database
 	echo Importing database \'remote-database-$CURRENT_TIME.sql\' to local server: $LOCAL_DATABASE_HOST
 	mysql -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS $LOCAL_DATABASE_NAME --max_allowed_packet=512M < "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
@@ -101,3 +101,6 @@ else
 	echo ERROR: Could not connect to the local or remote database
 	read -p "Press enter to continue"
 fi
+
+
+
