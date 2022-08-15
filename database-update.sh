@@ -52,7 +52,7 @@ do
 		if [[ $t == *_options && $IGNORE_ACTIVE_PLUGINS == true ]]; then
 			# Retain the active plugin row from the options table
 			echo "RETAIN TABLE: \"$t\""
-			mysqldump -v -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS $LOCAL_DATABASE_NAME $t --where="option_name=='active_plugins'" --skip-comments --no-tablespaces --quick --max_allowed_packet=512M >> "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
+			mysqldump -v -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS $LOCAL_DATABASE_NAME $t --where="option_name='active_plugins'" --skip-comments --no-tablespaces --quick --max_allowed_packet=512M >> "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
 		fi
 	fi
 done
