@@ -48,6 +48,12 @@ do
 		# Retain originals for skipped tables
 		echo "RETAIN TABLE: \"$t\""
 		mysqldump -v -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS $LOCAL_DATABASE_NAME $t --skip-comments --no-tablespaces --quick --max_allowed_packet=512M >> "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
+	else
+		if [[ $t == *_options && $IGNORE_ACTIVE_PLUGINS == true ]]; then
+			# Retain the active plugin row from the options table
+			echo "RETAIN TABLE: \"$t\""
+			mysqldump -v -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS $LOCAL_DATABASE_NAME $t --where="option_name=='active_plugins'" --skip-comments --no-tablespaces --quick --max_allowed_packet=512M >> "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
+		fi
 	fi
 done
 
@@ -71,8 +77,8 @@ if mysql -h $LOCAL_DATABASE_HOST -u $LOCAL_DATABASE_USER -p$LOCAL_DATABASE_PASS 
 		else
 		 	echo "DUMPING TABLE: \"$t\""
 			if [[ $t == *_options && $IGNORE_ACTIVE_PLUGINS == true ]]; then
-			 	# Ignore "active_plugins" option so as not to affect the active plugins
-				mysqldump -v -h $REMOTE_DATABASE_HOST -u $REMOTE_DATABASE_USER -p$REMOTE_DATABASE_PASS $REMOTE_DATABASE_NAME $t --where="option_name!='active_plugins'" --skip-comments --no-tablespaces --quick --max_allowed_packet=512M >> "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
+			 	# Ignore "active_plugins" option so as not to affect the active plugins. Also, do not CREATE here as we should have that above already
+				mysqldump -v -h $REMOTE_DATABASE_HOST -u $REMOTE_DATABASE_USER -p$REMOTE_DATABASE_PASS $REMOTE_DATABASE_NAME $t --no-create-info --where="option_name!='active_plugins'" --skip-comments --no-tablespaces --quick --max_allowed_packet=512M >> "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
 			else
 		 	 	mysqldump -v -h $REMOTE_DATABASE_HOST -u $REMOTE_DATABASE_USER -p$REMOTE_DATABASE_PASS $REMOTE_DATABASE_NAME $t --skip-comments --no-tablespaces --quick --max_allowed_packet=512M >> "$CONFIG/dumps/remote-database-$CURRENT_TIME.sql"
 			fi
@@ -101,6 +107,3 @@ else
 	echo ERROR: Could not connect to the local or remote database
 	read -p "Press enter to continue"
 fi
-
-
-
